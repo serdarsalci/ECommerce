@@ -1,0 +1,26 @@
+.header {
+	height: 11rem;
+	box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.wrap {
+	max-width: 1450px;
+	height: 100%;
+	position: relative;
+	margin: 0 auto;
+	// border: 1px red solid;
+
+	.logo {
+		width: 13rem;
+		position: absolute;
+		top: 10%;
+		left: 10px;
+		height: max-content;
+
+		img {
+			display: block;
+			max-height: 10rem;
+			margin: 0;
+		}
+	}
+}
