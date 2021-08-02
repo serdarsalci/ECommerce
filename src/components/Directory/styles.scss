@@ -1,5 +1,9 @@
 .directory {
 	height: 100%;
+	width: 100%;
+	.wrap {
+		height: 100%;
+	}
 	.item {
 		width: 50%;
 		height: 100%;
@@ -32,7 +36,6 @@
 			font-size: 2rem;
 			line-height: 1;
 			font-weight: 400;
-			cursor: pointer;
 			text-transform: uppercase;
 			padding: 10px 15px;
 			border: 2px solid black;
