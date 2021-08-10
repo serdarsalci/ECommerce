@@ -1,9 +1,15 @@
 .footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background-color: rgb(238, 238, 238);
 	.wrap {
 		max-width: 1450px;
+		height: auto;
 		margin: 0 auto;
 		padding: 10px 10px;
 		// border: red 1px solid;
 		text-align: center;
+		font-size: 1.2rem;
 	}
 }

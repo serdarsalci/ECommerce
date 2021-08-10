@@ -3,15 +3,19 @@
 	box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
 
 	.wrap {
+		padding-right: 20px;
 		max-width: 1450px;
 		height: 100%;
 		position: relative;
 		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		// border: 1px red solid;
 
 		.logo {
 			width: 13rem;
-			position: absolute;
+			// position: absolute;
 			top: 10%;
 			left: 10px;
 			height: max-content;
@@ -23,12 +27,13 @@
 			}
 		}
 		.callToActions {
-			position: absolute;
-			top: 50%;
-			right: 10px;
-			-webkit-transform: translateY(-50%);
-			-moz-transform: translateY(-50%);
-			transform: translateY(-50%);
+			// border: 2px red dashed;
+			// position: absolute;
+			// top: 50%;
+			// right: 10px;
+			// -webkit-transform: translateY(-50%);
+			// -moz-transform: translateY(-50%);
+			// transform: translateY(-50%);
 
 			ul,
 			li {
@@ -37,7 +42,13 @@
 			}
 
 			li {
+				display: inline-block;
 				list-style: none;
+				margin-right: 2rem;
+
+				&:last-child {
+					margin-right: 0;
+				}
 
 				a {
 					font-size: 1.6rem;

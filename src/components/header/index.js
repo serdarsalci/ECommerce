@@ -1,7 +1,7 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import './styles.scss'
-import Logo from '../../ assets/Sample-Logo.jpg'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './styles.scss';
+import Logo from '../../ assets/Sample-Logo.jpg';
 
 const Header = props => {
 	return (
@@ -17,11 +17,14 @@ const Header = props => {
 						<li>
 							<Link to='/registration'>Register</Link>
 						</li>
+						<li>
+							<Link to='/login'>Login</Link>
+						</li>
 					</ul>
 				</div>
 			</div>
 		</header>
-	)
-}
+	);
+};
 
-export default Header
+export default Header;
