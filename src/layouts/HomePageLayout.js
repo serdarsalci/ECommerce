@@ -1,15 +1,15 @@
-import React from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import React from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const HomePageLayout = props => {
 	return (
 		<div className='fullHeight'>
-			<Header />
+			<Header {...props} />
 			{props.children}
 			<Footer />
 		</div>
-	)
-}
+	);
+};
 
-export default HomePageLayout
+export default HomePageLayout;
