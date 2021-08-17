@@ -17,6 +17,7 @@ const Header = props => {
 				<div className='callToActions'>
 					{currentUser && (
 						<ul>
+							<li>Logged in as {currentUser.displayName}</li>
 							<li>
 								<span onClick={() => auth.signOut()}>Logout</span>
 							</li>

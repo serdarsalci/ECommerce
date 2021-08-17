@@ -16,6 +16,10 @@ export const signInWithGoogle = () => {
 	auth.signInWithPopup(GoogleProvider);
 };
 
+export const signupWithEmail = () => {
+	auth.signInWithCredential();
+};
+
 export const handleUserProfile = async (userAuth, additionalData) => {
 	if (!userAuth) return;
 	const { uid } = userAuth;

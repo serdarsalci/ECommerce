@@ -1,9 +1,12 @@
-.signin {
+.signup {
 	display: block;
 	width: 100%;
 	max-width: 40rem;
 	margin: 4rem auto 5rem;
 	border: 1px solid black;
+	ul {
+		padding: 0;
+	}
 
 	.wrap {
 		padding: 0 0.5rem;
@@ -25,6 +28,12 @@
 
 		.formWrap {
 			margin: 2rem auto 0;
+			// background-color: antiquewhite;
+		}
+
+		.errors {
+			color: red;
+			list-style: none;
 		}
 	}
 }

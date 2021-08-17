@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
+import Signup from './../../components/Signup';
+
 const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1,
@@ -17,11 +19,7 @@ const useStyles = makeStyles(theme => ({
 export const Registration = () => {
 	const classes = useStyles();
 
-	return (
-		<>
-			<h1>Registration Page</h1>
-		</>
-	);
+	return <Signup />;
 };
 
 export default Registration;

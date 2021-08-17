@@ -38,14 +38,6 @@ class App extends Component {
 			this.setState({
 				...initialState,
 			});
-			// if (!userAuth) {
-			// 	this.setState({
-			// 		...initialState,
-			// 	});
-			// }
-			// this.setState({
-			// 	currentUser: userAuth,
-			// });
 		});
 	}
 
@@ -70,11 +62,15 @@ class App extends Component {
 					<Route
 						exact
 						path='/registration'
-						render={() => (
-							<MainLayout currentUser={currentUser}>
-								<Registation />
-							</MainLayout>
-						)}
+						render={() =>
+							currentUser ? (
+								<Redirect to='/' />
+							) : (
+								<MainLayout currentUser={currentUser}>
+									<Registation />
+								</MainLayout>
+							)
+						}
 					/>
 					<Route
 						exact
