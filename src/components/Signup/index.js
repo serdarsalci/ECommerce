@@ -4,6 +4,7 @@ import FormInput from '../forms/Forminput';
 import Button from '../forms/Button';
 
 import { auth, handleUserProfile } from '../../firebase/utils';
+import AuthWrapper from '../AuthWrapper';
 
 import { useState } from 'react';
 
@@ -32,9 +33,11 @@ const Signup = () => {
 			const err = 'Passwords do not match';
 
 			if (!errors.includes(err)) {
-				setState({ ...state, [errors]: errors.push(err) });
+				setState({ ...state, [errors]: state.errors.push(err) });
+				setTimeout(() => {
+					setState({ ...state, [errors]: state.errors.pop() });
+				}, 3000);
 			}
-			console.log(state.errors.length);
 			return;
 		}
 
@@ -44,69 +47,63 @@ const Signup = () => {
 				password
 			);
 
-			// console.log('user returned is ', user);
-
 			let userTobe = { ...user, displayName };
 
 			await handleUserProfile(userTobe);
 
 			setState(initialState);
-		} catch (error) {
-			console.log(error);
+		} catch (err) {
+			if (!errors.includes(err.message)) {
+				setState({ ...state, [errors]: state.errors.push(err.message) });
+				setTimeout(() => {
+					setState({ ...state, [errors]: state.errors.pop() });
+				}, 3000);
+			}
 		}
+	};
+
+	const configAuthWrapper = {
+		headline: 'Signup',
 	};
 
 	// const { displayName, email, password, confirmPassword, errors } = user;
 	return (
-		<div className='signup'>
-			<div className='wrap'>
-				<h2>Signup</h2>
-				{/* <h2
-				>{user.displayName}</h2> */}
+		<AuthWrapper {...configAuthWrapper} errors={state.errors}>
+			<div className='formWrap'>
+				<form onSubmit={handleFormSubmit}>
+					<FormInput
+						type='text'
+						name='displayName'
+						value={state.displayName}
+						placeholder='Full name'
+						onChange={handleChange}
+					/>
+					<FormInput
+						type='email'
+						name='email'
+						value={state.email}
+						placeholder='Email'
+						onChange={handleChange}
+					/>
+					<FormInput
+						type='password'
+						name='password'
+						value={state.password}
+						placeholder='Password'
+						onChange={handleChange}
+					/>
+					<FormInput
+						type='password'
+						name='confirmPassword'
+						value={state.confirmPassword}
+						placeholder='Confirm Password'
+						onChange={handleChange}
+					/>
 
-				{errors.length > 0 && (
-					<ul className='errors'>
-						{errors.map((err, index) => {
-							return <li key={index}>{err}</li>;
-						})}
-					</ul>
-				)}
-				<div className='formWrap'>
-					<form onSubmit={handleFormSubmit}>
-						<FormInput
-							type='text'
-							name='displayName'
-							value={state.displayName}
-							placeHolder='Full name'
-							onChange={handleChange}
-						/>
-						<FormInput
-							type='email'
-							name='email'
-							value={state.email}
-							placeHolder='Email'
-							onChange={handleChange}
-						/>
-						<FormInput
-							type='password'
-							name='password'
-							value={state.password}
-							placeHolder='Password'
-							onChange={handleChange}
-						/>
-						<FormInput
-							type='password'
-							name='confirmPassword'
-							value={state.confirmPassword}
-							placeHolder='Confirm Password'
-							onChange={handleChange}
-						/>
-
-						<Button type='submit'>Register</Button>
-					</form>
-				</div>
+					<Button type='submit'>Register</Button>
+				</form>
 			</div>
-		</div>
+		</AuthWrapper>
 	);
 };
 

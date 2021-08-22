@@ -1,4 +1,4 @@
-.signin {
+.authWrapper {
 	display: block;
 	width: 100%;
 	max-width: 40rem;
@@ -40,19 +40,5 @@
 			padding: 0;
 			// height: 0.5rem;
 		}
-	}
-}
-
-.links {
-	font-size: 1.5rem;
-	display: block;
-	width: 100%;
-	text-align: center;
-	margin: 1rem auto;
-	a {
-		color: black;
-	}
-	a:hover {
-		font-size: 1.6rem;
 	}
 }

@@ -19,7 +19,9 @@ const Header = props => {
 						<ul>
 							<li>Logged in as {currentUser.displayName}</li>
 							<li>
-								<span onClick={() => auth.signOut()}>Logout</span>
+								<span className='logout' onClick={() => auth.signOut()}>
+									Logout
+								</span>
 							</li>
 						</ul>
 					)}
