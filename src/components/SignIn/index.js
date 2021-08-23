@@ -29,7 +29,12 @@ const SignIn = () => {
 		console.log(errors);
 
 		try {
-			await auth.signInWithEmailAndPassword(email, password);
+			const credentials = await auth.signInWithEmailAndPassword(
+				email,
+				password
+			);
+
+			console.log(credentials.user);
 
 			setState(initialState);
 		} catch (err) {

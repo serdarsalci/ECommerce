@@ -3,9 +3,24 @@ import { Link } from 'react-router-dom';
 import { auth } from './../../firebase/utils';
 import './styles.scss';
 import Logo from '../../ assets/Sample-Logo.jpg';
+import { capitilizeFirstLetter } from '../../ utils';
+import { useHistory } from 'react-router';
+import { logoutUser } from '../../redux/User/user.actions';
+import { useDispatch, useSelector } from 'react-redux';
 
-const Header = props => {
-	const { currentUser } = props;
+const Header = () => {
+	// const { currentUser } = props;
+	const currentUser = useSelector(state => state.user.currentUser);
+	const history = useHistory();
+
+	// console.log(currentUser);
+	const dispatch = useDispatch();
+
+	const handleSignOut = async () => {
+		await auth.signOut();
+		dispatch(logoutUser());
+	};
+
 	return (
 		<header className='header'>
 			<div className='wrap'>
@@ -17,9 +32,9 @@ const Header = props => {
 				<div className='callToActions'>
 					{currentUser && (
 						<ul>
-							<li>Logged in as {currentUser.displayName}</li>
+							<li>Logged In {currentUser.displayName}</li>
 							<li>
-								<span className='logout' onClick={() => auth.signOut()}>
+								<span className='logout' onClick={handleSignOut}>
 									Logout
 								</span>
 							</li>

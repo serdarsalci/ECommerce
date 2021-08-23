@@ -3,7 +3,7 @@ import './styles.scss';
 
 const AuthWrapper = ({ children, headline, errors }) => {
 	if (errors) {
-		console.log(errors);
+		// console.log(errors);
 	}
 	return (
 		<div className='authWrapper'>
