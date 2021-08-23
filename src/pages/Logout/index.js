@@ -4,7 +4,7 @@ import { auth } from '../../firebase/utils';
 const Logout = () => {
 	useEffect(() => {
 		console.log('logout useEffect');
-		const authListener = auth.onAuthStateChanged();
+		// const authListener = auth.onAuthStateChanged();
 	}, []);
 
 	return (

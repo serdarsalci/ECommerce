@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './styles.scss';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router';
 
 import Buttons from '../../components/forms/Button';
 import { signInWithGoogle, auth } from '../../firebase/utils';
@@ -17,30 +18,28 @@ const initialState = {
 const SignIn = () => {
 	const [state, setState] = useState(initialState);
 	const { email, password } = state;
+	const history = useHistory();
 	//
 	const handleChange = e => {
 		const { name, value } = e.target;
 		setState({ ...state, [name]: value });
 	};
-	//
+
 	const handleSubmit = async e => {
 		e.preventDefault();
 		const { email, password, errors } = state;
-		console.log(errors);
 
 		try {
 			const credentials = await auth.signInWithEmailAndPassword(
 				email,
 				password
 			);
-
-			console.log(credentials.user);
-
 			setState(initialState);
+			history.push('/');
 		} catch (err) {
 			if (!errors.includes(err.message)) {
-				const length = errors.push(err.message);
-				// console.log(state.error[0]);
+				errors.push(err.message);
+
 				setState({ ...state, errors: errors });
 				setTimeout(() => {
 					errors.pop();

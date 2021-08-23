@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { auth, handleUserProfile } from './firebase/utils';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import './default.scss';
-import Header from './components/Header';
 import Homepage from './pages/Homepage';
 import Registation from './pages/Registration';
 import MainLayout from './layouts/MainLayout';
@@ -10,8 +10,9 @@ import HomePageLayout from './layouts/HomePageLayout';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Recovery from './pages/Recovery';
+import Dashboard from './pages/Dashboard';
 import { setCurrentUser } from './redux/User/user.actions';
-import { useDispatch, useSelector } from 'react-redux';
+import WithAuth from './hoc/withAuth';
 
 const initialState = {
 	currentUser: null,
@@ -19,36 +20,38 @@ const initialState = {
 };
 
 const App = () => {
-	const [state, setState] = useState(initialState);
-
-	// let authListener = null;
-
+	// const [state, setState] = useState(initialState);
 	const dispatch = useDispatch();
-
+	const history = useHistory();
 	useEffect(() => {
-		let authListener = auth.onAuthStateChanged(async userAuth => {
+		const authListener = auth.onAuthStateChanged(async userAuth => {
 			if (userAuth) {
 				const userRef = await handleUserProfile(userAuth);
-
-				userRef.onSnapshot(snapshot => {
-					console.log('snapshot');
-					console.log(snapshot.data().displayName);
-					dispatch(
-						setCurrentUser({
-							id: snapshot.id,
-							...snapshot.data(),
-						})
-					);
-				});
+				userRef.onSnapshot(
+					snapshot => {
+						console.log('snapshot');
+						console.log(snapshot.data().displayName);
+						dispatch(
+							setCurrentUser({
+								id: snapshot.id,
+								...snapshot.data(),
+							})
+						);
+					},
+					onError => {
+						console.log('error happened');
+					}
+				);
 			}
 			setCurrentUser(userAuth);
 		});
 
-		return authListener;
+		return () => {
+			authListener();
+		};
 	}, []);
 
-	const currentUser = useSelector(stat => stat.user.currentUser);
-	// console.log(currentUser);
+	const currentUser = useSelector(state => state.user.currentUser);
 	return (
 		<div className='App'>
 			<Switch>
@@ -64,28 +67,20 @@ const App = () => {
 				<Route
 					exact
 					path='/registration'
-					render={() =>
-						currentUser ? (
-							<Redirect to='/' />
-						) : (
-							<MainLayout currentUser={currentUser}>
-								<Registation />
-							</MainLayout>
-						)
-					}
+					render={() => (
+						<MainLayout currentUser={currentUser}>
+							<Registation />
+						</MainLayout>
+					)}
 				/>
 				<Route
 					exact
 					path='/login'
-					render={() =>
-						currentUser ? (
-							<Redirect to='/' />
-						) : (
-							<MainLayout currentUser={currentUser}>
-								<Login />
-							</MainLayout>
-						)
-					}
+					render={() => (
+						<MainLayout currentUser={currentUser}>
+							<Login />
+						</MainLayout>
+					)}
 				/>
 				<Route
 					exact
@@ -102,6 +97,16 @@ const App = () => {
 						<MainLayout>
 							<Recovery />
 						</MainLayout>
+					)}
+				/>
+				<Route
+					path='/dashboard'
+					render={() => (
+						<WithAuth>
+							<MainLayout>
+								<Dashboard />
+							</MainLayout>
+						</WithAuth>
 					)}
 				/>
 			</Switch>

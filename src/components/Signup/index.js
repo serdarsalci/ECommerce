@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './styles.scss';
 import FormInput from '../forms/Forminput';
 import Button from '../forms/Button';
+import { useHistory } from 'react-router';
 
 import { auth, handleUserProfile } from '../../firebase/utils';
 import AuthWrapper from '../AuthWrapper';
@@ -26,6 +27,7 @@ const Signup = () => {
 		setState({ ...state, [name]: value });
 		// console.log(user.displayName);
 	};
+	const history = useHistory();
 
 	const handleFormSubmit = async e => {
 		e.preventDefault();
@@ -52,6 +54,7 @@ const Signup = () => {
 			await handleUserProfile(userTobe);
 
 			setState(initialState);
+			history.push('/');
 		} catch (err) {
 			if (!errors.includes(err.message)) {
 				setState({ ...state, [errors]: state.errors.push(err.message) });

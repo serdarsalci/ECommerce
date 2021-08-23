@@ -34,9 +34,12 @@ const Header = () => {
 						<ul>
 							<li>Logged In {currentUser.displayName}</li>
 							<li>
-								<span className='logout' onClick={handleSignOut}>
-									Logout
-								</span>
+								<Link className='logout' onClick={handleSignOut}>
+									LOGOUT
+								</Link>
+							</li>
+							<li>
+								<Link to='/dashboard'>My Account</Link>
 							</li>
 						</ul>
 					)}
