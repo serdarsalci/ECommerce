@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.scss';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
 import Buttons from '../../components/forms/Button';
-import { signInWithGoogle, auth } from '../../firebase/utils';
+// import { signInWithGoogle } from '../../firebase/utils';
 
 import FormInput from '../forms/Forminput';
 import AuthWrapper from '../AuthWrapper';
+import { useDispatch, useSelector } from 'react-redux';
+import { signInUser, signInWithGoogle } from '../../redux/User/user.actions';
 
 const initialState = {
 	email: '',
@@ -15,10 +17,24 @@ const initialState = {
 	errors: [],
 };
 
+const mapState = ({ user }) => ({
+	signInSuccess: user.signInSuccess,
+});
+
 const SignIn = () => {
+	const dispatch = useDispatch();
+	const history = useHistory();
+	const { signInSuccess } = useSelector(mapState);
 	const [state, setState] = useState(initialState);
 	const { email, password } = state;
-	const history = useHistory();
+
+	useEffect(() => {
+		if (signInSuccess) {
+			setState(initialState);
+			history.push('/');
+		}
+	}, [signInSuccess]);
+
 	//
 	const handleChange = e => {
 		const { name, value } = e.target;
@@ -27,30 +43,17 @@ const SignIn = () => {
 
 	const handleSubmit = async e => {
 		e.preventDefault();
-		const { email, password, errors } = state;
-
-		try {
-			const credentials = await auth.signInWithEmailAndPassword(
-				email,
-				password
-			);
-			setState(initialState);
-			history.push('/');
-		} catch (err) {
-			if (!errors.includes(err.message)) {
-				errors.push(err.message);
-
-				setState({ ...state, errors: errors });
-				setTimeout(() => {
-					errors.pop();
-					setState({ ...state, errors: errors });
-				}, 2000);
-			}
-		}
+		dispatch(signInUser({ email, password }));
 	};
 
 	const configAuthWrapper = {
 		headline: 'Login',
+	};
+
+	const handleGoogleSignIn = e => {
+		e.preventDefault();
+		console.log('handleGoogle sign in called');
+		dispatch(signInWithGoogle());
 	};
 
 	return (
@@ -77,7 +80,9 @@ const SignIn = () => {
 						</div>
 						<hr />
 						<div className='row'>
-							<Buttons onClick={signInWithGoogle}>Sign in with google</Buttons>
+							<Buttons onClick={handleGoogleSignIn}>
+								Sign in with google
+							</Buttons>
 						</div>
 					</div>
 					<div className='links'>

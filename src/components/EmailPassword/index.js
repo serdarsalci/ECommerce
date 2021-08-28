@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import './styles.scss';
-
-import { auth } from '../../firebase/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetPassword } from './../../redux/User/user.actions';
 
 import AuthWrapper from '../AuthWrapper';
 import FormInput from '../forms/Forminput';
 import Button from '../forms/Button';
 
+const mapState = ({ user }) => ({
+	resetPasswordSuccess: user.resetPasswordSuccess,
+	resetPasswordError: user.resetPasswordError,
+});
+
 const EmailPassword = () => {
 	const [state, setState] = useState({ email: '', errors: [] });
 	const { email } = state;
+	const { resetPasswordSuccess, resetPasswordError } = useSelector(mapState);
+
+	const dispatch = useDispatch();
 
 	const history = useHistory();
+
+	useEffect(() => {
+		if (resetPasswordSuccess) {
+			history.push('/login');
+		}
+	}, [resetPasswordSuccess]);
+
+	useEffect(() => {
+		if (Array.isArray(resetPasswordError) && resetPasswordError.length > 0) {
+			setState({ errors: resetPasswordError });
+		}
+	}, [resetPasswordError]);
 
 	const handleChange = e => {
 		setState({
@@ -20,29 +40,14 @@ const EmailPassword = () => {
 			[e.target.name]: e.target.value.trim(),
 		});
 	};
-	
-	const handleSubmit = async e => {
+
+	const handleSubmit = e => {
 		e.preventDefault();
+		dispatch(resetPassword({ email }));
 
-		try {
-			const { email } = state;
-			const config = {
-				url: 'http://localhost:3000/login',
-			};
-			await auth.sendPasswordResetEmail(email, config);
-
-			console.log('email sent');
-			history.push('/login');
-		} catch (err) {
-			console.log('Failed catch block');
-			const error = ['Email not found. Please try again'];
-			const { errors } = state;
-			errors.push(error);
-
-			setState({ ...state, errors: error });
-			console.log(state.errors);
-		}
+		// history.push('/login');
 	};
+
 	const config = {
 		headline: 'Email Password',
 	};
@@ -50,9 +55,9 @@ const EmailPassword = () => {
 	return (
 		<AuthWrapper {...config}>
 			<div className='formWrap'>
-				{errors.length > 0 && (
+				{resetPasswordError.length > 0 && (
 					<ul>
-						{errors.map((e, ind) => {
+						{resetPasswordError.map((e, ind) => {
 							return <li key={ind}>{e}</li>;
 						})}
 					</ul>

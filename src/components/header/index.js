@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 const Header = () => {
 	// const { currentUser } = props;
 	const currentUser = useSelector(state => state.user.currentUser);
-	const history = useHistory();
 
 	// console.log(currentUser);
 	const dispatch = useDispatch();
@@ -53,17 +52,6 @@ const Header = () => {
 							</li>
 						</ul>
 					)}
-					{/* <ul>
-						<li>
-							<Link to='/registration'>Register</Link>
-						</li>
-						<li>
-							<Link to='/login'>Login</Link>
-						</li>
-						<li>
-							<Link to='/logout'>Logout</Link>
-						</li>
-					</ul> */}
 				</div>
 			</div>
 		</header>

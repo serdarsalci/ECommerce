@@ -22,7 +22,6 @@ const initialState = {
 const App = () => {
 	// const [state, setState] = useState(initialState);
 	const dispatch = useDispatch();
-	const history = useHistory();
 	useEffect(() => {
 		const authListener = auth.onAuthStateChanged(async userAuth => {
 			if (userAuth) {

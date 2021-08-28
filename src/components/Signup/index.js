@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import './styles.scss';
 import FormInput from '../forms/Forminput';
 import Button from '../forms/Button';
 import { useHistory } from 'react-router';
-
-import { auth, handleUserProfile } from '../../firebase/utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUpUser } from './../../redux/User/user.actions';
+// import { auth, handleUserProfile } from '../../firebase/utils';
 import AuthWrapper from '../AuthWrapper';
 
 import { useState } from 'react';
@@ -16,10 +17,34 @@ let initialState = {
 	confirmPassword: '',
 	errors: [],
 };
+const mapState = ({ user }) => ({
+	signUpSuccess: user.signUpSuccess,
+	signUpError: user.signUpError,
+});
 
 const Signup = () => {
+	const { signUpSuccess, signUpError } = useSelector(mapState);
 	const [state, setState] = useState(initialState);
 	const { displayName, email, password, confirmPassword, errors } = state;
+	const dispatch = useDispatch();
+	const history = useHistory();
+
+	const reset = () => {
+		setState(initialState);
+	};
+
+	useEffect(() => {
+		if (signUpSuccess) {
+			reset();
+			history.push('/');
+		}
+	}, [signUpSuccess]);
+
+	useEffect(() => {
+		if (Array.isArray(signUpError) && signUpError.length > 0) {
+			setState({ ...state, errors: signUpError });
+		}
+	}, [signUpError]);
 
 	const handleChange = e => {
 		// console.log(e.target);
@@ -27,42 +52,17 @@ const Signup = () => {
 		setState({ ...state, [name]: value });
 		// console.log(user.displayName);
 	};
-	const history = useHistory();
 
-	const handleFormSubmit = async e => {
+	const handleFormSubmit = e => {
 		e.preventDefault();
-		if (password !== confirmPassword) {
-			const err = 'Passwords do not match';
-
-			if (!errors.includes(err)) {
-				setState({ ...state, [errors]: state.errors.push(err) });
-				setTimeout(() => {
-					setState({ ...state, [errors]: state.errors.pop() });
-				}, 3000);
-			}
-			return;
-		}
-
-		try {
-			const { user } = await auth.createUserWithEmailAndPassword(
+		dispatch(
+			signUpUser({
+				displayName,
 				email,
-				password
-			);
-
-			let userTobe = { ...user, displayName };
-
-			await handleUserProfile(userTobe);
-
-			setState(initialState);
-			history.push('/');
-		} catch (err) {
-			if (!errors.includes(err.message)) {
-				setState({ ...state, [errors]: state.errors.push(err.message) });
-				setTimeout(() => {
-					setState({ ...state, [errors]: state.errors.pop() });
-				}, 3000);
-			}
-		}
+				password,
+				confirmPassword,
+			})
+		);
 	};
 
 	const configAuthWrapper = {
